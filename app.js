@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const axios = require('axios');
 const https = require('https');
 
-const app = express();//Whatever goes into the argument is going to be a static folder
+const app = express();
 app.use(bodyParser.urlencoded({ extended:true }));
 app.use(cors())
 
@@ -13,7 +13,9 @@ app.get('/', (req, res)=>{
 })
 
 app.post('/submit',  (req, res)=>{
-    console.log(req.body);
+    console.log(reqs.body);
+    const req = JSON.parse(reqs.body);
+    console.log(req);
 
     const firstName = req.body.fName;
     const lastName = req.body.lName;
@@ -22,6 +24,7 @@ app.post('/submit',  (req, res)=>{
     const cty = req.body.city;
     const st = req.body.state;
     const phoneNo = parseInt(req.phone); 
+
 
     var data = {
         members:[
@@ -44,11 +47,11 @@ app.post('/submit',  (req, res)=>{
 
     const jsonData = JSON.stringify(data);
 
-    const url = "https://us21.api.mailchimp.com/3.0/lists/97b32c06be";
+    const url =  process.env.MAILCHIMP_URL ;
 
     const options = {
         method: "POST",
-        auth: "dograchirag:c4acdaeea86feb66ac8be027f9d026ae-us21"
+        auth: AUTH_KEY,
     }
 
     const request = https.request(url, options, (response)=>{
@@ -71,9 +74,3 @@ app.post('/submit',  (req, res)=>{
 app.listen( 4000, ()=>{
     console.log("Listening on port 4000");
 })
-
-// API key
-// c4acdaeea86feb66ac8be027f9d026ae-us21
-
-// LIST ID
-// 97b32c06be
