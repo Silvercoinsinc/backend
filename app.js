@@ -59,7 +59,9 @@ app.post('/submit',  (reqs, res)=>{
         method: "POST",
         auth: process.env.AUTH_KEY,
     }
-
+    
+    console.log(url)
+    
     const request = https.request(url, options, (response)=>{
         if(response.statusCode === 200) {
             res.send("Successfully subscribed!")
