@@ -14,7 +14,6 @@ app.get('/', (req, res)=>{
 })
 
 app.post('/submit',  (reqs, res)=>{
-    // console.log(reqs.body);
     const req = JSON.parse(Object.keys(reqs.body)[0]);
     console.log(req);
 
