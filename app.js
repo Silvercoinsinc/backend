@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const https = require('https');
+require("dotenv").config();
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended:true }));
@@ -12,18 +13,22 @@ app.get('/', (req, res)=>{
     res.send("Server is Listening");
 })
 
-app.post('/submit',  (req, res)=>{
-    console.log(reqs.body);
-    const req = JSON.parse(reqs.body);
+app.post('/submit',  (reqs, res)=>{
+    // console.log(reqs.body);
+    const req = JSON.parse(Object.keys(reqs.body)[0]);
     console.log(req);
 
-    const firstName = req.body.fName;
-    const lastName = req.body.lName;
-    const email = req.body.email;
-    const add = req.body.address;
-    const cty = req.body.city;
-    const st = req.body.state;
+    const firstName = req.fName;
+    const lastName = req.lName;
+    const email = req.email;
+    const add = req.address;
+    const cty = req.city;
+    const st = req.state;
     const phoneNo = parseInt(req.phone); 
+    console.log(add);
+    console.log(cty);
+    console.log(st);
+    console.log(phoneNo);
 
 
     var data = {
@@ -34,13 +39,15 @@ app.post('/submit',  (req, res)=>{
                 merge_fields: {
                     FNAME: firstName,
                     LNAME: lastName,
+                    PHONE: phoneNo,
                     ADDRESS: {
                         addr1: add,
                         city: cty,
                         state: st,
+                        zip: "12345"
                     },
-                    NUMBER: phoneNo
-                }
+                    
+                },
             }
         ]
     };
@@ -51,7 +58,7 @@ app.post('/submit',  (req, res)=>{
 
     const options = {
         method: "POST",
-        auth: AUTH_KEY,
+        auth: process.env.AUTH_KEY,
     }
 
     const request = https.request(url, options, (response)=>{
